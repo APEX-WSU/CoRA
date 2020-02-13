@@ -17,11 +17,11 @@ with classification data taken from [Andrew McCallum's original dataset](https:/
 ```python
 import pandas as pd
 import numpy as np
-import json
 
-paper_terms = json.load(open('paper_terms.json'))
 terms = json.load(open('term_dictionary.json'))
-df = pd.DataFrame.from_dict(paper_terms, 'index', dtype=pd.SparseDtype('float', 0)).fillna(0) 
+papers = pd.read_json('/home/dan/projects/cora/paper_terms.json',
+                      'index',
+                      dtype=pd.SparseDtype('float32', np.nan)).fillna(0).astype(pd.SparseDtype('float32', 0))
 df.index.name = 'paper_id'
 df.columns = [terms[c] for c in df.columns]
 ```
