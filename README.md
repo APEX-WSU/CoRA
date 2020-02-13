@@ -36,3 +36,21 @@ citations = json.load(open('paper_references.json'))
 g = nx.DiGraph()
 g.add_edges_from(author_names)
 ```
+### NetworkX (2+) coauthorship graph
+```python
+import json
+import itertools
+import networkx as nx
+
+author_names = json.load(open('/home/dan/projects/cora/author_names.json'))
+paper_authors = json.load(open('/home/dan/projects/cora/paper_authors.json'))
+edges = []
+for paper_id, authors in paper_authors.items():
+    for author1, author2 in itertools.combinations(authors, 2):
+        edges.append((author1, author2, {'paper_id': paper_id}))
+        edges.append((author2, author1, {'paper_id': paper_id}))
+        
+g = nx.MultiDiGraph()
+g.add_edges_from(edges)
+  nx.set_node_attributes(g, {author_id: {'name': name} for author_id, name in author_names.items() if author_id in g})
+```
